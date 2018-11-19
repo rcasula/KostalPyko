@@ -35,5 +35,5 @@ setup(name='pikopy',
                    ],
 
       # setup_requires = ['python-stdeb', 'fakeroot', 'python-all'],
-      install_requires=['setuptools', 'lxml'],
+      install_requires=['setuptools'],
       )
