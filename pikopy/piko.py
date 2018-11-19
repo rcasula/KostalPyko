@@ -24,7 +24,12 @@
 
 """Library to work with a Piko inverter from Kostal."""
 
-import urllib.request
+# HTTP libraries depends upon Python 2 or 3
+if version_info.major == 3 :
+    import urllib.request
+else:
+    from urllib import urlencode
+    import urllib2
 from lxml import html
 
 
@@ -52,28 +57,53 @@ class Piko():
         
     def _get_content_of_own_consumption(self):
         """returns all values as a list"""
-        url = self.host + "/BA.fhtml"
-        password_mgr = urllib.request.HTTPPasswordMgrWithDefaultRealm()
-        password_mgr.add_password(None, url, self.username, self.password)
-        handler = urllib.request.HTTPBasicAuthHandler(password_mgr)
-        opener = urllib.request.build_opener(handler)
-        opener.open(url)
+        if version_info.major == 3:
+            url = self.host + "/BA.fhtml"
+            password_mgr = urllib.request.HTTPPasswordMgrWithDefaultRealm()
+            password_mgr.add_password(None, url, self.username, self.password)
+            handler = urllib.request.HTTPBasicAuthHandler(password_mgr)
+            opener = urllib.request.build_opener(handler)
+            opener.open(url)
 
-        urllib.request.install_opener(opener)
-        response = urllib.request.urlopen(url)
-        root = html.fromstring(response.read().strip())
+            urllib.request.install_opener(opener)
+            response = urllib.request.urlopen(url)
+            root = html.fromstring(response.read().strip())
         
-        data = []
-        for v in root.xpath("//b"):
-            raw = v.text.strip()
-            raw = raw[:-1] #remove unit
-            try:
-                value = float(raw)
-            except:
-                value = 0
-            data.append(value)
+            data = []
+            for v in root.xpath("//b"):
+                raw = v.text.strip()
+                raw = raw[:-1] #remove unit
+                try:
+                    value = float(raw)
+                except:
+                    value = 0
+                data.append(value)
         
-        return data
+            return data
+        else:
+            url = self.host + "/BA.fhtml"
+            password_mgr = urllib2.HTTPPasswordMgrWithDefaultRealm()
+            password_mgr.add_password(None, self.host, self.username, self.password)
+            handler = urllib2.HTTPBasicAuthHandler(password_mgr)
+            opener = urllib2.build_opener(handler)
+            opener.open(url)
+
+            urllib2.install_opener(opener)
+            response = urllib2.urlopen(self.host)
+            root = html.fromstring(response.read().strip())
+            
+            data = []
+            for v in root.xpath("//b"):
+                raw = v.text.strip()
+                raw = raw[:-1] #remove unit
+                try:
+                    value = float(raw)
+                except:
+                    value = 0
+                data.append(value)
+        
+            return data
+
 
     def get_logdaten_dat(self):
         pass
@@ -140,21 +170,34 @@ class Piko():
 
     def _get_raw_content(self):
         """returns all values as a list"""
-        password_mgr = urllib.request.HTTPPasswordMgrWithDefaultRealm()
-        password_mgr.add_password(None, self.host, self.username, self.password)
-        handler = urllib.request.HTTPBasicAuthHandler(password_mgr)
-        opener = urllib.request.build_opener(handler)
-        opener.open(self.host)
+        if version_info.major == 3:
+            password_mgr = urllib.request.HTTPPasswordMgrWithDefaultRealm()
+            password_mgr.add_password(None, self.host, self.username, self.password)
+            handler = urllib.request.HTTPBasicAuthHandler(password_mgr)
+            opener = urllib.request.build_opener(handler)
+            opener.open(self.host)
 
-        urllib.request.install_opener(opener)
-        response = urllib.request.urlopen(self.host)
-        root = html.fromstring(response.read().strip())
+            urllib.request.install_opener(opener)
+            response = urllib.request.urlopen(self.host)
+            root = html.fromstring(response.read().strip())
         
-        data = []
-        for v in root.xpath("//td[@bgcolor='#FFFFFF']"):
-            raw = v.text.strip()
-            if ('x x x' in raw):
-                raw = -1
+            data = []
+            for v in root.xpath("//td[@bgcolor='#FFFFFF']"):
+                raw = v.text.strip()
+                if ('x x x' in raw):
+                    raw = -1
             data.append(raw)
         
-        return data
+            return data
+        else:
+            password_mgr = urllib2.HTTPPasswordMgrWithDefaultRealm()
+            password_mgr.add_password(None, self.host, self.username, self.password)
+            handler = urllib2.HTTPBasicAuthHandler(password_mgr)
+            opener = urllib2.build_opener(handler)
+            opener.open(self.host)
+
+            urllib2.install_opener(opener)
+            response = urllib2.urlopen(self.host)
+            root = html.fromstring(response.read().strip())
+            data = [v.text.strip() for v in root.xpath("//td[@bgcolor='#FFFFFF']")]
+            return data
