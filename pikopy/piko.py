@@ -24,6 +24,8 @@
 
 """Library to work with a Piko inverter from Kostal."""
 
+from sys import version_info
+
 # HTTP libraries depends upon Python 2 or 3
 if version_info.major == 3 :
     import urllib.request
