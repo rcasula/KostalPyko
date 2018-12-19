@@ -75,20 +75,26 @@ class Piko():
             url = self.host + '/BA.fhtml'
             login = self.username
             pwd = self.password
-            response = html.fromstring(
-                requests.get(url, auth=(login, pwd)).content)
-
-            data = []
-            for v in response.xpath("//b"):
-                raw = v.text.strip()
-                raw = raw[:-1]  # remove unit
-                try:
-                    value = float(raw)
-                except:
-                    value = 0
-                data.append(value)
-
-            return data
+            try:
+                r = requests.get(url, auth=(login, pwd), timeout=15)
+                if r.status_code == 200:
+                    response = html.fromstring(r.content)
+                    data = []
+                    for v in response.xpath("//b"):
+                        raw = v.text.strip()
+                        raw = raw[:-1]  # remove unit
+                        try:
+                            value = float(raw)
+                        except:
+                            value = 0
+                        data.append(value)
+                    return data
+                else:
+                    raise ConnectionError
+            except requests.exceptions.ConnectionError as errc:
+                return None
+            except requests.exceptions.Timeout as errt:
+                return None
 
         else:
             url = self.host + "/BA.fhtml"
@@ -184,16 +190,23 @@ class Piko():
             url = self.host + '/index.fhtml'
             login = self.username
             pwd = self.password
-            response = html.fromstring(
-                requests.get(url, auth=(login, pwd)).content)
-            data = []
-            for v in response.xpath("//td[@bgcolor='#FFFFFF']"):
-                raw = v.text.strip()
-                if ('x x x' in raw):
-                    raw = 0
-                data.append(raw)
-            return data
-
+            try:
+                r = requests.get(url, auth=(login, pwd), timeout=15)
+                if r.status_code == 200:
+                    response = html.fromstring(r.content)
+                    data = []
+                    for v in response.xpath("//td[@bgcolor='#FFFFFF']"):
+                        raw = v.text.strip()
+                        if ('x x x' in raw):
+                            raw = 0
+                        data.append(raw)
+                    return data
+                else:
+                    raise ConnectionError
+            except requests.exceptions.ConnectionError as errc:
+                return None
+            except requests.exceptions.Timeout as errt:
+                return None
         else:
             password_mgr = urllib2.HTTPPasswordMgrWithDefaultRealm()
             password_mgr.add_password(
