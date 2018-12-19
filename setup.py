@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 
 
 setup(name='pikopy',
-      version='0.9.0',
+      version='1.0.0',
       author='Christian Stade-Schuldt',
       author_email='stadeschuldt@gmail.com',
       url='https://github.com/Tafkas/KostalPikoPy',
