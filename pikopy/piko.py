@@ -154,11 +154,21 @@ class Piko():
 
     def get_string3_voltage(self):
         """returns the voltage from string 3 in V"""
-        return int(self._get_raw_content()[11])
+        raw_content = self._get_raw_content()
+        if len(raw_content) < 14:
+            # String 3 not installed
+            return None
+        else:
+            return int(raw_content[11])
 
     def get_string3_current(self):
         """returns the current from string 3 in A"""
-        return float(self._get_raw_content()[13])
+        raw_content = self._get_raw_content()
+        if len(raw_content) < 14:
+            # String 3 not installed
+            return None
+        else:
+            return float(raw_content[13])
 
     def get_l1_voltage(self):
         """returns the voltage from line 1 in V"""
@@ -178,11 +188,23 @@ class Piko():
 
     def get_l3_voltage(self):
         """returns the voltage from line 3 in V"""
-        return int(self._get_raw_content()[12])
+        raw_content = self._get_raw_content()
+        if len(raw_content) < 14:
+            # 2 Strings
+            return int(raw_content[11])
+        else:
+            # 3 Strings
+            return int(raw_content[12])
 
     def get_l3_power(self):
         """returns the power from line 3 in W"""
-        return int(self._get_raw_content()[14])
+        raw_content = self._get_raw_content()
+        if len(raw_content) < 14:
+            # 2 Strings
+            return int(raw_content[12])
+        else:
+            # 3 Strings
+            return int(raw_content[14])
 
     def _get_raw_content(self):
         """returns all values as a list"""
