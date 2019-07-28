@@ -21,3 +21,4 @@ nosetests.xml
 .project
 .pydevproject
 */.idea/workspace.xml */.idea/tasks.xml
+.idea
