@@ -1,3 +1,4 @@
+requests
 httpretty
 httplib2
 lxml
