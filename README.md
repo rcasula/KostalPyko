@@ -12,11 +12,11 @@ PikoPy has been tested with a Kostal Piko 5.5. It should work with other Kostal 
  
 ## Installing
 ```bash
-$ pip install pikopy
+$ pip install kostalpyko
 ```
 
 ## Usage
-    from pikopy.piko import Piko
+    from kostalpyko.kostalpyko import Piko
     
     #create a new piko instance
     p = Piko('host', 'username', 'password')
@@ -27,3 +27,5 @@ $ pip install pikopy
     #get voltage from string 1
     print(p.get_string1_voltage())
 
+## Thanks to
+https://github.com/Tafkas since this packet is based on https://github.com/Tafkas/KostalPikoPy
