@@ -16,14 +16,14 @@ $ pip install pikopy
 ```
 
 ## Usage
-    import pikopy
+    from pikopy.piko import Piko
     
     #create a new piko instance
     p = Piko('host', 'username', 'password')
     
     #get current power 
-    print p.get_current_power()
+    print(p.get_current_power())
     
     #get voltage from string 1
-    print p.get_string1_voltage()
+    print(p.get_string1_voltage())
 
