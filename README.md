@@ -1,10 +1,11 @@
-# PikoPy
+# KostalPyko
 This package is for working with a Piko Inverter from [Kostal](http://www.kostal-solar-electric.com/)
 
 ## Where has it been tested?
-PikoPy has been tested with a Kostal Piko 5.5. It should work with other Kostal inverters as well since they provide the same interface.
+KostalPyko has been tested with a Kostal Piko 5.5. It should work with other Kostal inverters as well since they provide the same interface.
 
 ## Requirements
+ * Requests
  * Python
  * lxml
  * httplib2
