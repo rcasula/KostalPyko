@@ -2,8 +2,11 @@ from setuptools import setup
 
 setup(
     name='kostalpyko',
-    version='v0.1',
+    version='v0.2',
     packages=['tests', 'kostalpyko'],
+    install_requires=[
+          'lxml',
+      ],
     url='https://github.com/gieljnssns/KostalPikoPy',
     license='MIT',
     author='Giel Janssens',
