@@ -2,12 +2,14 @@
 
 
 """Library to work with a Piko inverter from Kostal."""
+import logging
 
 from lxml import html
 
 # HTTP libraries depends upon Python 2 or 3
 import requests
 
+LOG = logging.getLogger(__name__)
 
 class Piko:
     def __init__(self, host=None, username='pvserver', password='pvwr'):
@@ -61,6 +63,7 @@ class Piko:
                     except:
                         value = 0
                     data.append(value)
+                LOG.debug("content_of_own_consumption:", data)
                 return data
             else:
                 raise ConnectionError
@@ -160,6 +163,8 @@ class Piko:
         pwd = self.password
         try:
             r = requests.get(url, auth=(login, pwd), timeout=15)
+            LOG.debug("status_code:", r.status_code)
+            # print("status_code:", r.status_code)
             if r.status_code == 200:
                 response = html.fromstring(r.content)
                 data = []
@@ -168,10 +173,14 @@ class Piko:
                     if 'x x x' in raw:
                         raw = 0
                     data.append(raw)
+                LOG.debug("raw_content:", data)
+                # print("raw_content:", data)
                 return data
             else:
                 raise ConnectionError
         except requests.exceptions.ConnectionError as errc:
+            LOG.debug("ConnectionError", errc)
             return None
         except requests.exceptions.Timeout as errt:
+            LOG.debug("Timeout", errt)
             return None
