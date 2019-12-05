@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='kostalpyko',
-    version='v0.2',
+    version='v0.3',
     packages=['tests', 'kostalpyko'],
     install_requires=[
           'lxml',
