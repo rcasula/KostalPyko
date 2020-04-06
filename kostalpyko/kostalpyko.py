@@ -113,7 +113,7 @@ class Piko:
     def get_string3_voltage(self):
         """returns the voltage from string 3 in V"""
         raw_content = self._get_raw_content()
-        if len(raw_content) < 14:
+        if len(raw_content) < 15:
             # String 3 not installed
             return None
         else:
@@ -122,7 +122,7 @@ class Piko:
     def get_string3_current(self):
         """returns the current from string 3 in A"""
         raw_content = self._get_raw_content()
-        if len(raw_content) < 14:
+        if len(raw_content) < 15:
             # String 3 not installed
             return None
         else:
@@ -151,7 +151,7 @@ class Piko:
     def get_l3_voltage(self):
         """returns the voltage from line 3 in V"""
         raw_content = self._get_raw_content()
-        if len(raw_content) < 14:
+        if len(raw_content) < 15:
             # 2 Strings
             return int(raw_content[11])
         else:
@@ -161,12 +161,22 @@ class Piko:
     def get_l3_power(self):
         """returns the power from line 3 in W"""
         raw_content = self._get_raw_content()
-        if len(raw_content) < 14:
+        if len(raw_content) < 15:
             # 2 Strings
             return int(raw_content[12])
         else:
             # 3 Strings
             return int(raw_content[14])
+
+    def get_piko_status(self):
+        """returns the power from line 3 in W"""
+        raw_content = self._get_raw_content()
+        if len(raw_content) < 15:
+            # 2 Strings
+            return raw_content[13]
+        else:
+            # 3 Strings
+            return int(raw_content[15])
 
     def _get_raw_content(self):
         """returns all values as a list"""
@@ -185,6 +195,8 @@ class Piko:
                     if 'x x x' in raw:
                         raw = 0
                     data.append(raw)
+                status = response.xpath("/html/body/form/font/table[2]/tr[8]/td[3]")[0].text.strip()
+                data.append(status)
                 LOG.debug("raw_content:", data)
                 # print("raw_content:", data)
                 return data
@@ -196,3 +208,4 @@ class Piko:
         except requests.exceptions.Timeout as errt:
             LOG.debug("Timeout", errt)
             return None
+            
