@@ -4,15 +4,15 @@
 """Library to work with a Piko inverter from Kostal."""
 import logging
 
-from lxml import html
-
 # HTTP libraries depends upon Python 2 or 3
 import requests
+from lxml import html
 
 LOG = logging.getLogger(__name__)
 
+
 class Piko:
-    def __init__(self, host=None, username='pvserver', password='pvwr'):
+    def __init__(self, host=None, username="pvserver", password="pvwr"):
         self.host = host
         self.username = username
         self.password = password
@@ -47,7 +47,7 @@ class Piko:
 
     def _get_content_of_own_consumption(self):
         """returns all values as a list"""
-        url = self.host + '/BA.fhtml'
+        url = self.host + "/BA.fhtml"
         login = self.username
         pwd = self.password
         try:
@@ -63,13 +63,15 @@ class Piko:
                     except:
                         value = 0
                     data.append(value)
-                LOG.debug("content_of_own_consumption:", data)
+                LOG.debug(data)
                 return data
             else:
                 raise ConnectionError
         except requests.exceptions.ConnectionError as errc:
+            LOG.debug(errc)
             return None
         except requests.exceptions.Timeout as errt:
+            LOG.debug(errt)
             return None
 
     def get_logdaten_dat(self):
@@ -180,32 +182,59 @@ class Piko:
 
     def _get_raw_content(self):
         """returns all values as a list"""
-        url = self.host + '/index.fhtml'
+        url = self.host + "/index.fhtml"
         login = self.username
         pwd = self.password
         try:
             r = requests.get(url, auth=(login, pwd), timeout=15)
-            LOG.debug("status_code:", r.status_code)
-            # print("status_code:", r.status_code)
             if r.status_code == 200:
                 response = html.fromstring(r.content)
                 data = []
                 for v in response.xpath("//td[@bgcolor='#FFFFFF']"):
                     raw = v.text.strip()
-                    if 'x x x' in raw:
+                    if "x x x" in raw:
                         raw = 0
                     data.append(raw)
-                status = response.xpath("/html/body/form/font/table[2]/tr[8]/td[3]")[0].text.strip()
+                status = response.xpath("/html/body/form/font/table[2]/tr[8]/td[3]")[
+                    0
+                ].text.strip()
                 data.append(status)
-                LOG.debug("raw_content:", data)
-                # print("raw_content:", data)
+                LOG.debug(data)
                 return data
             else:
                 raise ConnectionError
         except requests.exceptions.ConnectionError as errc:
-            LOG.debug("ConnectionError", errc)
+            LOG.debug(errc)
             return None
         except requests.exceptions.Timeout as errt:
-            LOG.debug("Timeout", errt)
+            LOG.debug(errt)
             return None
-            
+
+    def _get_info(self):
+        """returns the info about the inverter"""
+        url = self.host + "/Solar2.fhtml"
+        login = self.username
+        pwd = self.password
+        try:
+            r = requests.get(url, auth=(login, pwd), timeout=15)
+            if r.status_code == 200:
+                response = html.fromstring(r.content)
+                data = []
+                serial = response.xpath("/html/body/form/font/table/tr[2]/td[3]")[
+                    0
+                ].text.strip()
+                data.append(serial)
+                model = response.xpath("/html/body/form/table/tr[2]/td[2]/font[1]")[
+                    0
+                ].text.strip()
+                data.append(model)
+                LOG.debug(data)
+                return data
+            else:
+                raise ConnectionError
+        except requests.exceptions.ConnectionError as errc:
+            LOG.debug(errc)
+            return None
+        except requests.exceptions.Timeout as errt:
+            LOG.debug(errt)
+            return None
