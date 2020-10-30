@@ -20,28 +20,28 @@ class Piko:
     def get_solar_generator_power(self):
         """returns the current power of the solar generator in W"""
         if self._get_content_of_own_consumption():
-            return self._get_content_of_own_consumption()[5]
+            return self.safe_list_get(self._get_content_of_own_consumption(), 5)
         else:
             return "No BA sensor installed"
 
     def get_consumption_phase_1(self):
         """returns the current consumption of phase 1 in W"""
         if self._get_content_of_own_consumption():
-            return self._get_content_of_own_consumption()[8]
+            return self.safe_list_get(self._get_content_of_own_consumption(), 8)
         else:
             return "No BA sensor installed"
 
     def get_consumption_phase_2(self):
         """returns the current consumption of phase 2 in W"""
         if self._get_content_of_own_consumption():
-            return self._get_content_of_own_consumption()[9]
+            return self.safe_list_get(self._get_content_of_own_consumption(), 9)
         else:
             return "No BA sensor installed"
 
     def get_consumption_phase_3(self):
         """returns the current consumption of phase 3 in W"""
         if self._get_content_of_own_consumption():
-            return self._get_content_of_own_consumption()[10]
+            return self.safe_list_get(self._get_content_of_own_consumption(), 10)
         else:
             return "No BA sensor installed"
 
@@ -80,37 +80,65 @@ class Piko:
     def get_current_power(self):
         """returns the current power in W"""
         if self._get_raw_content() is not None:
-            return int(self._get_raw_content()[0])
+            value = self.safe_list_get(self._get_raw_content(), 0)
+            if value is not None:
+                return int(value)
+            else:
+                return None
 
     def get_total_energy(self):
         """returns the total energy in kWh"""
         if self._get_raw_content() is not None:
-            return int(self._get_raw_content()[1])
+            value = self.safe_list_get(self._get_raw_content(), 1)
+            if value is not None:
+                return int(value)
+            else:
+                return None
 
     def get_daily_energy(self):
         """returns the daily energy in kWh"""
         if self._get_raw_content() is not None:
-            return float(self._get_raw_content()[2])
+            value = self.safe_list_get(self._get_raw_content(), 2)
+            if value is not None:
+                return float(value)
+            else:
+                return None
 
     def get_string1_voltage(self):
         """returns the voltage from string 1 in V"""
         if self._get_raw_content() is not None:
-            return int(self._get_raw_content()[3])
+            value = self.safe_list_get(self._get_raw_content(), 3)
+            if value is not None:
+                return int(value)
+            else:
+                return None
 
     def get_string1_current(self):
         """returns the current from string 1 in A"""
         if self._get_raw_content() is not None:
-            return float(self._get_raw_content()[5])
+            value = self.safe_list_get(self._get_raw_content(), 5)
+            if value is not None:
+                return float(value)
+            else:
+                return None
 
     def get_string2_voltage(self):
         """returns the voltage from string 2 in V"""
         if self._get_raw_content() is not None:
-            return int(self._get_raw_content()[7])
+            value = self.safe_list_get(self._get_raw_content(), 7)
+            if value is not None:
+                return int(value)
+            else:
+                return None
 
     def get_string2_current(self):
         """returns the current from string 2 in A"""
         if self._get_raw_content() is not None:
-            return float(self._get_raw_content()[9])
+            value = self.safe_list_get(self._get_raw_content(), 9)
+            if value is not None:
+                return float(value)
+            else:
+                return None
 
     def get_string3_voltage(self):
         """returns the voltage from string 3 in V"""
@@ -119,7 +147,11 @@ class Piko:
             # String 3 not installed
             return None
         else:
-            return int(raw_content[11])
+            value = self.safe_list_get(raw_content, 11)
+            if value is not None:
+                return int(value)
+            else:
+                return None
 
     def get_string3_current(self):
         """returns the current from string 3 in A"""
@@ -128,57 +160,97 @@ class Piko:
             # String 3 not installed
             return None
         else:
-            return float(raw_content[13])
+            value = self.safe_list_get(raw_content, 13)
+            if value is not None:
+                return float(value)
+            else:
+                return None
 
     def get_l1_voltage(self):
         """returns the voltage from line 1 in V"""
         if self._get_raw_content() is not None:
-            return int(self._get_raw_content()[4])
+            value = self.safe_list_get(self._get_raw_content(), 4)
+            if value is not None:
+                return int(value)
+            else:
+                return None
 
     def get_l1_power(self):
         """returns the power from line 1 in W"""
         if self._get_raw_content() is not None:
-            return int(self._get_raw_content()[6])
+            value = self.safe_list_get(self._get_raw_content(), 6)
+            if value is not None:
+                return int(value)
+            else:
+                return None
 
     def get_l2_voltage(self):
         """returns the voltage from line 2 in V"""
         if self._get_raw_content() is not None:
-            return int(self._get_raw_content()[8])
+            value = self.safe_list_get(self._get_raw_content(), 8)
+            if value is not None:
+                return int(value)
+            else:
+                return None
 
     def get_l2_power(self):
         """returns the power from line 1 in W"""
         if self._get_raw_content() is not None:
-            return int(self._get_raw_content()[10])
+            value = self.safe_list_get(self._get_raw_content(), 10)
+            if value is not None:
+                return int(value)
+            else:
+                return None
 
     def get_l3_voltage(self):
         """returns the voltage from line 3 in V"""
         raw_content = self._get_raw_content()
         if len(raw_content) < 15:
             # 2 Strings
-            return int(raw_content[11])
+            value = self.safe_list_get(raw_content, 11)
+            if value is not None:
+                return int(value)
+            else:
+                return None
         else:
             # 3 Strings
-            return int(raw_content[12])
+            value = self.safe_list_get(raw_content, 12)
+            if value is not None:
+                return int(value)
+            else:
+                return None
 
     def get_l3_power(self):
         """returns the power from line 3 in W"""
         raw_content = self._get_raw_content()
         if len(raw_content) < 15:
             # 2 Strings
-            return int(raw_content[12])
+            value = self.safe_list_get(raw_content, 12)
+            if value is not None:
+                return int(value)
+            else:
+                return None
         else:
             # 3 Strings
-            return int(raw_content[14])
+            value = self.safe_list_get(raw_content, 14)
+            if value is not None:
+                return int(value)
+            else:
+                return None
 
     def get_piko_status(self):
         """returns the power from line 3 in W"""
         raw_content = self._get_raw_content()
         if len(raw_content) < 15:
             # 2 Strings
-            return raw_content[13]
+            return self.safe_list_get(raw_content, 13)
         else:
             # 3 Strings
-            return int(raw_content[15])
+            value = self.safe_list_get(raw_content, 15)
+            if value is not None:
+                return int(value)
+            else:
+                return None
 
     def _get_raw_content(self):
         """returns all values as a list"""
@@ -238,3 +310,9 @@ class Piko:
         except requests.exceptions.Timeout as errt:
             LOG.debug(errt)
             return None
+
+    def safe_list_get(self, l, idx, default = None):
+        try:
+            return l[idx]
+        except IndexError:
+            return default
