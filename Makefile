@@ -1,6 +1,6 @@
-PYTHON=`which python`
-NAME=`python setup.py --name`
-VERSION=`python setup.py --version`
+PYTHON=`which python3`
+NAME=`python3 setup.py --name`
+VERSION=`python3 setup.py --version`
 SDIST=dist/$(NAME)-$(VERSION).tar.gz
 VENV=/tmp/venv
 
@@ -19,7 +19,7 @@ rpm:
 	$(PYTHON) setup.py bdist_rpm --post-install=rpm/postinstall --pre-uninstall=rpm/preuninstall
 
 install:
-	$(PYTHON) setup.py install --install-layout=deb
+	$(PYTHON) setup.py install
 
 test:
 	unit2 discover -s tests -t .
@@ -37,7 +37,7 @@ upload:
 	$(PYTHON) setup.py bdist_wininst upload
 
 init:
-	pip install -r requirements.txt --use-mirrors
+	pip3 install -r requirements.txt
 
 update:
 	rm ez_setup.py
