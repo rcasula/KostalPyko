@@ -1,13 +1,13 @@
 from setuptools import setup
 
 setup(
-    name="kostalpyko",
-    version="v0.5",
-    packages=["tests", "kostalpyko"],
+    name="kostalpiko",
+    version="v0.1",
+    packages=["tests", "kostalpiko"],
     install_requires=["lxml",],
-    url="https://github.com/gieljnssns/KostalPikoPy",
+    url="https://github.com/rcasula/kostalpiko",
     license="MIT",
-    author="Giel Janssens",
-    author_email="gieljnssns@vivaldi.net",
+    author="Roberto Casula",
+    author_email="roberto@casula.dev",
     description="A package for working with a Piko Inverter from Kostal",
 )
