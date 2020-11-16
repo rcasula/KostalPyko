@@ -8,14 +8,9 @@ import logging
 import requests
 from lxml import html
 
+from .utils import safe_list_get
+
 LOG = logging.getLogger(__name__)
-
-
-def safe_list_get(self, l, idx, default=None):
-    try:
-        return l[idx]
-    except IndexError:
-        return default
 
 
 class Piko:

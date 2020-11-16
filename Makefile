@@ -53,7 +53,7 @@ deploy:
 
 	# setup venv
 	rm -rf $(VENV)
-	virtualenv --no-site-packages $(VENV)
+	virtualenv $(VENV)
 	$(VENV)/bin/pip install $(SDIST)
 
 clean:
