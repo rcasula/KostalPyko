@@ -3,15 +3,12 @@
 
 """Library to work with a Piko inverter from Kostal."""
 import logging
-
-# HTTP libraries depends upon Python 2 or 3
 import requests
 from lxml import html
-
 from .utils import safe_list_get
+from .const import SINGLE_STRING_INDICES, DOUBLE_STRING_INDICES, TRIPLE_STRING_INDICES
 
 LOG = logging.getLogger(__name__)
-
 
 class Piko:
     def __init__(self, host=None, username="pvserver", password="pvwr"):
@@ -70,10 +67,10 @@ class Piko:
             else:
                 raise ConnectionError
         except requests.exceptions.ConnectionError as errc:
-            LOG.debug(errc)
+            LOG.error(errc)
             return None
         except requests.exceptions.Timeout as errt:
-            LOG.debug(errt)
+            LOG.error(errt)
             return
 
     def _get_content_of_own_consumption(self):
@@ -145,11 +142,18 @@ class PikoData(object):
 
     def __init__(self, raw_data):
         self._raw_data = raw_data
+        n_values = len(raw_data)
+        if n_values == 8:
+            self.indices = SINGLE_STRING_INDICES
+        elif n_values == 12:
+            self.indices = DOUBLE_STRING_INDICES
+        elif n_values == 16:
+            self.indices = TRIPLE_STRING_INDICES
 
     def get_current_power(self):
         """returns the current power in W"""
-        if self._raw_data is not None:
-            value = safe_list_get(self._raw_data, 0)
+        if self._raw_data is not None and self.indices['current_power'] is not None:
+            value = safe_list_get(self._raw_data, self.indices['current_power'])
             if value is not None:
                 return int(value)
             else:
@@ -157,8 +161,8 @@ class PikoData(object):
 
     def get_total_energy(self):
         """returns the total energy in kWh"""
-        if self._raw_data is not None:
-            value = safe_list_get(self._raw_data, 1)
+        if self._raw_data is not None and self.indices['total_energy'] is not None:
+            value = safe_list_get(self._raw_data, self.indices['total_energy'])
             if value is not None:
                 return int(value)
             else:
@@ -166,8 +170,8 @@ class PikoData(object):
 
     def get_daily_energy(self):
         """returns the daily energy in kWh"""
-        if self._raw_data is not None:
-            value = safe_list_get(self._raw_data, 2)
+        if self._raw_data is not None and self.indices['daily_energy'] is not None:
+            value = safe_list_get(self._raw_data, self.indices['daily_energy'])
             if value is not None:
                 return float(value)
             else:
@@ -175,8 +179,8 @@ class PikoData(object):
 
     def get_string1_voltage(self):
         """returns the voltage from string 1 in V"""
-        if self._raw_data is not None:
-            value = safe_list_get(self._raw_data, 3)
+        if self._raw_data is not None and self.indices['string1_voltage'] is not None:
+            value = safe_list_get(self._raw_data, self.indices['string1_voltage'])
             if value is not None:
                 return int(value)
             else:
@@ -184,8 +188,8 @@ class PikoData(object):
 
     def get_string1_current(self):
         """returns the current from string 1 in A"""
-        if self._raw_data is not None:
-            value = safe_list_get(self._raw_data, 5)
+        if self._raw_data is not None and self.indices['string1_current'] is not None:
+            value = safe_list_get(self._raw_data, self.indices['string1_current'])
             if value is not None:
                 return float(value)
             else:
@@ -193,8 +197,8 @@ class PikoData(object):
 
     def get_string2_voltage(self):
         """returns the voltage from string 2 in V"""
-        if self._raw_data is not None:
-            value = safe_list_get(self._raw_data, 7)
+        if self.indices == DOUBLE_STRING_INDICES and self._raw_data is not None and self.indices['string2_voltage'] is not None:
+            value = safe_list_get(self._raw_data, index)
             if value is not None:
                 return int(value)
             else:
@@ -202,8 +206,8 @@ class PikoData(object):
 
     def get_string2_current(self):
         """returns the current from string 2 in A"""
-        if self._raw_data is not None:
-            value = safe_list_get(self._raw_data, 9)
+        if self.indices == DOUBLE_STRING_INDICES and self._raw_data is not None and self.indices['string2_current'] is not None:
+            value = safe_list_get(self._raw_data, index)
             if value is not None:
                 return float(value)
             else:
@@ -211,12 +215,8 @@ class PikoData(object):
 
     def get_string3_voltage(self):
         """returns the voltage from string 3 in V"""
-        raw_content = self._raw_data
-        if len(raw_content) < 15:
-            # String 3 not installed
-            return None
-        else:
-            value = safe_list_get(raw_content, 11)
+        if self.indices == TRIPLE_STRING_INDICES and self._raw_data is not None and self.indices['string3_voltage'] is not None:
+            value = safe_list_get(self._raw_data, index)
             if value is not None:
                 return int(value)
             else:
@@ -224,12 +224,8 @@ class PikoData(object):
 
     def get_string3_current(self):
         """returns the current from string 3 in A"""
-        raw_content = self._raw_data
-        if len(raw_content) < 15:
-            # String 3 not installed
-            return None
-        else:
-            value = safe_list_get(raw_content, 13)
+        if self.indices == TRIPLE_STRING_INDICES and self._raw_data is not None and self.indices['string3_current'] is not None:
+            value = safe_list_get(self._raw_data, index)
             if value is not None:
                 return float(value)
             else:
@@ -237,8 +233,8 @@ class PikoData(object):
 
     def get_l1_voltage(self):
         """returns the voltage from line 1 in V"""
-        if self._raw_data is not None:
-            value = safe_list_get(self._raw_data, 4)
+        if self._raw_data is not None and self.indices['l1_voltage'] is not None:
+            value = safe_list_get(self._raw_data, self.indices['l1_voltage'])
             if value is not None:
                 return int(value)
             else:
@@ -246,8 +242,8 @@ class PikoData(object):
 
     def get_l1_power(self):
         """returns the power from line 1 in W"""
-        if self._raw_data is not None:
-            value = safe_list_get(self._raw_data, 6)
+        if self._raw_data is not None and self.indices['l1_power'] is not None:
+            value = safe_list_get(self._raw_data, self.indices['l1_power'])
             if value is not None:
                 return int(value)
             else:
@@ -255,8 +251,8 @@ class PikoData(object):
 
     def get_l2_voltage(self):
         """returns the voltage from line 2 in V"""
-        if self._raw_data is not None:
-            value = safe_list_get(self._raw_data, 8)
+        if self.indices == DOUBLE_STRING_INDICES and self._raw_data is not None and self.indices['l2_voltage'] is not None:
+            value = safe_list_get(self._raw_data, self.indices['l2_voltage'])
             if value is not None:
                 return int(value)
             else:
@@ -264,8 +260,8 @@ class PikoData(object):
 
     def get_l2_power(self):
         """returns the power from line 1 in W"""
-        if self._raw_data is not None:
-            value = safe_list_get(self._raw_data, 10)
+        if self.indices == DOUBLE_STRING_INDICES and self._raw_data is not None and self.indices['l2_power'] is not None:
+            value = safe_list_get(self._raw_data, self.indices['l2_power'])
             if value is not None:
                 return int(value)
             else:
@@ -273,35 +269,16 @@ class PikoData(object):
 
     def get_l3_voltage(self):
         """returns the voltage from line 3 in V"""
-        raw_content = self._raw_data
-        if len(raw_content) < 15:
-            # 2 Strings
-            value = safe_list_get(raw_content, 11)
-            if value is not None:
-                return int(value)
-            else:
-                return None
-        else:
-            # 3 Strings
-            value = safe_list_get(raw_content, 12)
+        if self.indices == TRIPLE_STRING_INDICES and self._raw_data is not None and self.indices['l3_voltage'] is not None:
+            value = safe_list_get(self._raw_data, self.indices['l3_voltage'])
             if value is not None:
                 return int(value)
             else:
                 return None
 
     def get_l3_power(self):
-        """returns the power from line 3 in W"""
-        raw_content = self._raw_data
-        if len(raw_content) < 15:
-            # 2 Strings
-            value = safe_list_get(raw_content, 12)
-            if value is not None:
-                return int(value)
-            else:
-                return None
-        else:
-            # 3 Strings
-            value = safe_list_get(raw_content, 14)
+        if self.indices == TRIPLE_STRING_INDICES and self._raw_data is not None and self.indices['l3_power'] is not None:
+            value = safe_list_get(self._raw_data, self.indices['l3_power'])
             if value is not None:
                 return int(value)
             else:
@@ -309,15 +286,10 @@ class PikoData(object):
 
     def get_piko_status(self):
         """returns the power from line 3 in W"""
-        raw_content = self._raw_data
-        if len(raw_content) < 15:
-            # 2 Strings
-            return safe_list_get(raw_content, 13)
-        else:
-            # 3 Strings
-            value = safe_list_get(raw_content, 15)
+        if self._raw_data is not None and self.indices['status'] is not None:
+            value = safe_list_get(self._raw_data, self.indices['status'])
             if value is not None:
-                return int(value)
+                return value
             else:
                 return None
 
