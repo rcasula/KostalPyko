@@ -150,148 +150,136 @@ class PikoData(object):
         elif n_values == 16:
             self.indices = TRIPLE_STRING_INDICES
 
+    def safe_get_value(self, name):
+        if self._raw_data is not None and name in self.indices and self.indices[name] is not None:
+            return safe_list_get(self._raw_data, self.indices[name])
+
     def get_current_power(self):
         """returns the current power in W"""
-        if self._raw_data is not None and self.indices['current_power'] is not None:
-            value = safe_list_get(self._raw_data, self.indices['current_power'])
-            if value is not None:
-                return int(value)
-            else:
-                return None
+        value = self.safe_get_value('current_power')
+        if value is not None:
+            return int(value)
+        else:
+            return None
 
     def get_total_energy(self):
         """returns the total energy in kWh"""
-        if self._raw_data is not None and self.indices['total_energy'] is not None:
-            value = safe_list_get(self._raw_data, self.indices['total_energy'])
-            if value is not None:
-                return int(value)
-            else:
-                return None
+        value = self.safe_get_value('total_energy')
+        if value is not None:
+            return int(value)
+        else:
+            return None
 
     def get_daily_energy(self):
         """returns the daily energy in kWh"""
-        if self._raw_data is not None and self.indices['daily_energy'] is not None:
-            value = safe_list_get(self._raw_data, self.indices['daily_energy'])
-            if value is not None:
-                return float(value)
-            else:
-                return None
+        value = self.safe_get_value('daily_energy')
+        if value is not None:
+            return float(value)
+        else:
+            return None
 
     def get_string1_voltage(self):
         """returns the voltage from string 1 in V"""
-        if self._raw_data is not None and self.indices['string1_voltage'] is not None:
-            value = safe_list_get(self._raw_data, self.indices['string1_voltage'])
-            if value is not None:
-                return int(value)
-            else:
-                return None
+        value = self.safe_get_value('string1_voltage')
+        if value is not None:
+            return int(value)
+        else:
+            return None
 
     def get_string1_current(self):
         """returns the current from string 1 in A"""
-        if self._raw_data is not None and self.indices['string1_current'] is not None:
-            value = safe_list_get(self._raw_data, self.indices['string1_current'])
-            if value is not None:
-                return float(value)
-            else:
-                return None
+        value = self.safe_get_value('string1_current')
+        if value is not None:
+            return float(value)
+        else:
+            return None
 
     def get_string2_voltage(self):
         """returns the voltage from string 2 in V"""
-        if self.indices == DOUBLE_STRING_INDICES and self._raw_data is not None and self.indices['string2_voltage'] is not None:
-            value = safe_list_get(self._raw_data, index)
-            if value is not None:
-                return int(value)
-            else:
-                return None
+        value = self.safe_get_value('string2_voltage')
+        if value is not None:
+            return int(value)
+        else:
+            return None
 
     def get_string2_current(self):
         """returns the current from string 2 in A"""
-        if self.indices == DOUBLE_STRING_INDICES and self._raw_data is not None and self.indices['string2_current'] is not None:
-            value = safe_list_get(self._raw_data, index)
-            if value is not None:
-                return float(value)
-            else:
-                return None
+        value = self.safe_get_value('string2_current')
+        if value is not None:
+            return float(value)
+        else:
+            return None
 
     def get_string3_voltage(self):
         """returns the voltage from string 3 in V"""
-        if self.indices == TRIPLE_STRING_INDICES and self._raw_data is not None and self.indices['string3_voltage'] is not None:
-            value = safe_list_get(self._raw_data, index)
-            if value is not None:
-                return int(value)
-            else:
-                return None
+        value = self.safe_get_value('string3_voltage')
+        if value is not None:
+            return int(value)
+        else:
+            return None
 
     def get_string3_current(self):
         """returns the current from string 3 in A"""
-        if self.indices == TRIPLE_STRING_INDICES and self._raw_data is not None and self.indices['string3_current'] is not None:
-            value = safe_list_get(self._raw_data, index)
-            if value is not None:
-                return float(value)
-            else:
-                return None
+        value = self.safe_get_value('string3_current')
+        if value is not None:
+            return float(value)
+        else:
+            return None
 
     def get_l1_voltage(self):
         """returns the voltage from line 1 in V"""
-        if self._raw_data is not None and self.indices['l1_voltage'] is not None:
-            value = safe_list_get(self._raw_data, self.indices['l1_voltage'])
-            if value is not None:
-                return int(value)
-            else:
-                return None
+        value = self.safe_get_value('l1_voltage')
+        if value is not None:
+            return int(value)
+        else:
+            return None
 
     def get_l1_power(self):
         """returns the power from line 1 in W"""
-        if self._raw_data is not None and self.indices['l1_power'] is not None:
-            value = safe_list_get(self._raw_data, self.indices['l1_power'])
-            if value is not None:
-                return int(value)
-            else:
-                return None
+        value = self.safe_get_value('l1_power')
+        if value is not None:
+            return int(value)
+        else:
+            return None
 
     def get_l2_voltage(self):
         """returns the voltage from line 2 in V"""
-        if self.indices == DOUBLE_STRING_INDICES and self._raw_data is not None and self.indices['l2_voltage'] is not None:
-            value = safe_list_get(self._raw_data, self.indices['l2_voltage'])
-            if value is not None:
-                return int(value)
-            else:
-                return None
+        value = self.safe_get_value('l2_voltage')
+        if value is not None:
+            return int(value)
+        else:
+            return None
 
     def get_l2_power(self):
         """returns the power from line 1 in W"""
-        if self.indices == DOUBLE_STRING_INDICES and self._raw_data is not None and self.indices['l2_power'] is not None:
-            value = safe_list_get(self._raw_data, self.indices['l2_power'])
-            if value is not None:
-                return int(value)
-            else:
-                return None
+        value = self.safe_get_value('l2_power')
+        if value is not None:
+            return int(value)
+        else:
+            return None
 
     def get_l3_voltage(self):
         """returns the voltage from line 3 in V"""
-        if self.indices == TRIPLE_STRING_INDICES and self._raw_data is not None and self.indices['l3_voltage'] is not None:
-            value = safe_list_get(self._raw_data, self.indices['l3_voltage'])
-            if value is not None:
-                return int(value)
-            else:
-                return None
+        value = self.safe_get_value('l3_voltage')
+        if value is not None:
+            return int(value)
+        else:
+            return None
 
     def get_l3_power(self):
-        if self.indices == TRIPLE_STRING_INDICES and self._raw_data is not None and self.indices['l3_power'] is not None:
-            value = safe_list_get(self._raw_data, self.indices['l3_power'])
-            if value is not None:
-                return int(value)
-            else:
-                return None
+        value = self.safe_get_value('l3_power')
+        if value is not None:
+            return int(value)
+        else:
+            return None
 
     def get_piko_status(self):
         """returns the power from line 3 in W"""
-        if self._raw_data is not None and self.indices['status'] is not None:
-            value = safe_list_get(self._raw_data, self.indices['status'])
-            if value is not None:
-                return value
-            else:
-                return None
+        value = self.safe_get_value('status')
+        if value is not None:
+            return value
+        else:
+            return None
 
 
 class PikoBAData(object):
