@@ -4,7 +4,6 @@ VERSION=`python3 setup.py --version`
 SDIST=dist/$(NAME)-$(VERSION).tar.gz
 VENV=/tmp/venv
 
-
 all: check test source deb
 
 dist: source deb
