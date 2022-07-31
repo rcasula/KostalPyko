@@ -6,7 +6,7 @@ import logging
 import requests
 from lxml import html
 from .utils import safe_list_get
-from .const import SINGLE_STRING_INDICES, DOUBLE_STRING_INDICES, TRIPLE_STRING_INDICES
+from .const import SINGLE_STRING_INDICES, DOUBLE_STRING_INDICES, TRIPLE_STRING_INDICES, DOUBLE_STRING_THREE_PHASES_INDICES
 
 LOG = logging.getLogger(__name__)
 
