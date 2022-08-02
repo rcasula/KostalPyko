@@ -28,9 +28,9 @@ DOUBLE_STRING_THREE_PHASES_INDICES = {
     "l2_voltage": 8,
     "string2_current": 9,
     "l2_power": 10,
-    "l3_voltage": 8,
-    "l3_power": 10,
-    "status": 11 
+    "l3_voltage": 11,
+    "l3_power": 12,
+    "status": 13 
 }
 
 TRIPLE_STRING_INDICES = {
