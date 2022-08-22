@@ -2,3 +2,4 @@ v0.1, 2014-07-31 -- Initial release.
 v0.2, 2020-11-16 -- Fixed some bugs.
 v0.3, 2021-11-29 -- Fixed some bugs with indices.
 v0.4, 2022-05-24 -- Fixed some bugs with indices and added utility to safely get values.
+v0.5, 2022-08-22 -- Added compatibility to inverters with 3 phases 2 strings.
