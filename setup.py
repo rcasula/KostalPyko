@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name="kostalpiko",
-    version="v0.5",
+    version="v0.5.1",
     packages=["tests", "kostalpiko"],
     install_requires=["lxml",],
     url="https://github.com/rcasula/kostalpiko",
