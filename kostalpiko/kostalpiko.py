@@ -6,7 +6,7 @@ import logging
 import requests
 from lxml import html
 from .utils import safe_list_get
-from .const import SINGLE_STRING_INDICES, DOUBLE_STRING_INDICES, TRIPLE_STRING_INDICES, DOUBLE_STRING_THREE_PHASES_INDICES
+from .const import *
 
 LOG = logging.getLogger(__name__)
 
@@ -145,8 +145,10 @@ class PikoData(object):
         n_values = len(raw_data)
         if n_values == 8:
             self.indices = SINGLE_STRING_INDICES
+        elif n_values == 10:
+            self.indices = DOUBLE_STRING_SINGLE_PHASE_INDICES
         elif n_values == 12:
-            self.indices = DOUBLE_STRING_INDICES
+            self.indices = DOUBLE_STRING_TWO_PHASES_INDICES
         elif n_values == 14:
             self.indices = DOUBLE_STRING_THREE_PHASES_INDICES
         elif n_values == 16:

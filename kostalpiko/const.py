@@ -13,7 +13,14 @@ SINGLE_STRING_INDICES = {
     "status": 7
 }
 
-DOUBLE_STRING_INDICES = {
+DOUBLE_STRING_SINGLE_PHASE_INDICES = {
+    **BASE_INDICES,
+    "string2_voltage": 7,
+    "string2_current": 8,
+    "status": 9
+}
+
+DOUBLE_STRING_TWO_PHASES_INDICES = {
     **BASE_INDICES,
     "string2_voltage": 7,
     "l2_voltage": 8,
