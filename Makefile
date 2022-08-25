@@ -14,3 +14,6 @@ upload:
 
 clean:
 	rm -rf dist/*
+
+test:
+	unit2 discover -s tests -t .

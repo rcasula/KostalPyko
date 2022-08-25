@@ -10,6 +10,7 @@ class Test551(unittest.TestCase):
         httpretty.register_uri(httpretty.GET, "http://example.com/index.fhtml", body=open("./tests/fixtures/index55-1.html").read())
         self.piko = Piko(host='http://example.com')
         self.piko.update_data()
+        # print("Test 5-5-1")
 
     def tearDown(self):
         httpretty.disable()  # disable afterwards, so that you will have no problems in code that uses that socket module
